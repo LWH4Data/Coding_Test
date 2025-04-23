@@ -9,11 +9,15 @@ import heapq
 # 델타 로직
 dv = (-1, 1, 0 , 0)
 dh = (0 ,0 , -1, 1)
+# 1e9가 float type이기에 int 적용.
 inf = int(1e9)
 
-def dijkstra(t, grahp, dist):
+# 찾아본 솔루션은 함수에 인자를 포함해 두었으나 (함수에서 출력을 위해)
+# 전역변수로 사용해도 되기에 삭제
+def dijkstra():
     queue = []
 
+    # dijkstra에서 첫 노드의 가중치를 추가하는 부분.
     # (0, 0) 시작이니 이차원 배열에 현재 값을 복사.
     dist[0][0] = graph[0][0]
 
@@ -71,12 +75,15 @@ def dijkstra(t, grahp, dist):
                 -> 새롭게 초기화된 최단비용 temp와 기존의 최단비용 dist[nv][nh]를 비교하고,
                 -> 새로운 최단 비용 temp가 더 작다면 dist[nv][nh]를 업데이트한 뒤에 다시 해당 지점을 탐색한다.
             '''
-            if temp < dist[nv][nh]:
-                dist[nv][nh] = temp
-                heapq.heappush(queue, (temp, nv, nh))
+            if temp > dist[nv][nh]:
+                continue
+
+            dist[nv][nh] = temp
+            # temp가 아니라 'dist[nv][nh]'를 추가해도 결과 동일.
+            heapq.heappush(queue, (temp, nv, nh))
         
     # 함수에서 정답 바로 출력
-    print('Problem {}: {}'.format(t, dist[N - 1][N - 1]))
+    print(f'Problem {t}: {dist[N-1][N-1]}')
 
 # 몇 번째 문제인지 출력하기 위한 변수 초기화
 t = 1
@@ -90,7 +97,7 @@ while True:
         break
 
     dist = [[inf] * N for _ in range(N)]
-    dijkstra(t, graph, dist)
+    dijkstra()
 
     # 다음 문제로 넘어가니 문제도 다음 문제로 초기화
     t += 1
