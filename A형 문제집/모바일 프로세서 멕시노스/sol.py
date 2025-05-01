@@ -2,108 +2,82 @@ import sys, time
 sys.stdin = open('sample_in.txt')
 start_time = time.time()
 
-#===================================================
-def DFS(num):
+#===========================================================
+# 델타 로직
+dv = (-1, 1, 0, 0)
+dh = (0, 0, -1, 1)
+
+# 델타 탐색을 하는데 경로 길이도 고려해야 하기에 별도의 함수로 작성한다.
+def can_connect(v, h, dir):
     
-    # 탐색 범위 넘어가면 return
-    if num >= len(m_position):
+    # for loop은 함수 외부에서 돌고있고, dir은 0부터 3까지임.
+    nv = v + dv[dir]
+    nh = h + dh[dir]
+
+    # 경로를 받기 위한 변수 초기화
+    path = []
+
+    # 탐색 범위가 넘어가지 않는 이상은 탐색 지속.
+    while 0 <= nv < N and 0 <= nh < N:
+        
+        # 전선(2)이거나 다른 멕시노스 코어(1)이라면 경로가 안되기에 []을 반환
+        if graph[nv][nh] != 0:
+            return []
+
+        # 막히는 경우가 아니라면 지속적으로 경로를 업데이트하고, 최종 경로를 반환
+        path.append((nv, nh))
+        nv += dv[dir]
+        nh += dh[dir]
+    
+    # while을 모두 돌았다면 경로를 다 찾은 것이기에 경로를 return
+    return path
+        
+# DFS 탐색 함수
+def DFS(idx, connected, total_len):
+    
+    # 앞서 초기화한 최대 연결 수와 최소 길이를 전역변수로 활용
+    global max_connected, min_total_len
+
+    # idx는 전체 코어를 확인했나 확인하는 변수
+    # 일단 탐색이 끝난 경우 두 변수를 초기화 하고 return 한다.
+    if idx == len(core_list):
+
+        # 연결된 갯수가 더 많은 경우를 탐색했다면 '최대 연결 수'와 '최소 전선 길이'를 저장한다.
+        if connected > max_connected:
+            max_connected = connected
+            min_total_len = total_len
+
+        # 만약 연결의 수가 같은 경우를 찾았다면, 더 짧은 전선 길이로 초기화
+        elif connected == max_connected:
+            min_total_len = min(min_total_len, total_len)
         return
 
-    # 탐색하는 멕시노스의 좌표를 받는다.
-    v, h = m_position[num][0], m_position[num][1]
+    # 각 멕시노스 탐색 시작.
+    v, h = core_list[idx]
 
-    # 상, 우, 하, 좌를 탐색하며 연결한다.
+    # 델타 탐색 시작
     for dir in range(4):
-        check = False
 
-        if dir == 0:
-            
-            # 위쪽 방향을 보면서 
-            for nv in range(0, v):
-                
-                # 멕시노스가 있거나 전선(2)이면 skip
-                if graph[nv][h] == 1 or graph[nv][h] == 2:
-                    check = True
-                    break
-            
-            if check:
-                continue
-            
-            else:
-                # 전선 체크
-                for nv in range(0, v):
-                    graph[nv][h] = 2
-                
-                # 추가 탐색
-                DFS(num + 1)
-
-                # 끝나고 나오면 되돌리기
-                for nv in range(0, v):
-                    graph[nv][h] = 0
-
-        if dir == 1:
-            
-            # 오른쪽 방향을 보면서 
-            for nh in range(h + 1, N):
-                
-                # 멕시노스가 있거나 전선(2)이면 skip
-                if graph[v][nh] == 1 or graph[v][nh] == 2:
-                    check = True
-                    break
-            
-            if check:
-                continue
-            
-            else:
-                for nh in range(h + 1, N):
-                    graph[v][nh] = 2
-                
-                DFS(num + 1)
-
-                for nv in range(0, v):
-                    graph[nv][h] = 0
-                
-        if dir == 2:
-
-            # 아래 방향
-            for nv in range(v + 1, N):
-                if graph[v][nh] == 1 or graph[v][nh] == 2:
-                    check = True
-                    break
-
-            if check:
-                continue
-            
-            else:
-                for nv in range(v + 1, N):
-                    graph[nv][h] = 2
-                
-                DFS(num + 1)
-
-                for nv in range(0, v):
-                    graph[nv][h] = 0
+        # 델타 탐색 함수
+        path = can_connect(v, h, dir)
         
-        if dir == 3:
+        # 경로가 반환되지 않은 경우 이번 탐색을 넘김
+        if not path:
+            continue
 
-            # 좌측 방향
-            for nh in range(0, h):
-                if graph[v][nh] == 1 or graph[v][nh] == 2:
-                    check = True
-                    break
+        # 경로가 반환 됐다면 해당 경로를 모두 2로 초기화하여 전선을 표시해 줌.
+        for nv, nh in path:
+            graph[nv][nh] = 2
 
-            if check:
-                continue
-            
-            else:
-                for nh in range(0, h):
-                    graph[v][nh] = 2
-                
-                DFS(num + 1)
+        # 이후 추가 탐색을 위해 DSF 호출
+        DFS(idx + 1, connected + 1, total_len + len(path))
 
-                for nh in range(0, h):
-                    graph[v][nh] = 0
-        
-    
+        # DFS를 나온 경우 설치되었던 전선을 다시 원래 상태로 복구
+        for nv, nh in path:
+            graph[nv][nh] = 0
+
+    # 연결이 안되는 멕시노스도 있기에 구현.
+    DFS(idx + 1, connected, total_len)
 
 T = int(input())
 
@@ -111,63 +85,23 @@ for tc in range(1, T + 1):
     N = int(input())
     graph = [list(map(int, input().split())) for _ in range(N)]
 
-    # 우선 모든 멕시노스 좌표를 튜플로 받음.
-    # 이때 가장자리 좌표는 반환받지 않음을 주의해야 한다.
-    m_position = []
+    # 가장자리를 제외한 위치에 존재하는 멕시노스의 위치를 탐색
+    core_list = []
     for v in range(1, N - 1):
         for h in range(1, N - 1):
             if graph[v][h] == 1:
-                m_position.append((v, h))
-    
-    # DFS로 구현
-    DFS(0)
+                core_list.append((v, h))
 
+    # 함수 내에 전달할 '최대 전선 수' 변수와 '최소 길이' 변수를 초기화
+    max_connected = 0
+    min_total_len = float('inf')
 
+    # 깊이 우선 탐색
+    DFS(0, 0, 0)
 
-#===================================================
+    # 탐색 결과 반환
+    print(f'#{tc} {max_connected} {min_total_len}')
+#===========================================================
 
 end_time = time.time()
 print('time :', end_time - start_time)
-
-'''
-< 변수 명세 >
-- m_positionk: 멕시노스의 좌표 리스트
-
-'''
-
-'''
-< 로직 1 >
-1. 가장 자리에 있는 멕시노스를 제외한 나머지 멕시노스의 좌표를 받는다.
-
-2. 각 멕시노스 마다 상, 하, 좌, 우 가능한 곳으로 직선 경로로 전선을 연결한다.
-    e.g. 첫 번째 멕시노스 위로 연결
-    -> 두 번째 멕시노스도 위로 연결
-    -> 전선이 겹친다면 첫 번째 멕시노스를 우로 연결하고 
-    -> 두 번째 멕시노스는 그대로 위로 연결
-    -> 가능한 경우의 전선 길이를 tuple에 append하고
-    -> 반환
-
-3. 멕시노스의 수가 12개라 DFS가 가능할 듯한데??
-
-
-1. 완전 탐색을 돌리거나.
-
-2. 그리디 거나
-
-3. 시뮬 문제 같은데.
-
-'''
-
-'''
-< 시간 복잡도 >
-- 최악의 경우 모든 경로를 고려하니까 O(N^2)을 넘을리 없다.
-
-- 따라서 O(12 * 12)
-
-- 완탐 가능.
-'''
-
-'''
-< 문제 정리 >
-
-'''
