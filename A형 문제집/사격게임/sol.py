@@ -9,11 +9,13 @@ def DFS(depth, visited, path):
     
     # 모든 풍선을 전부 사격한 경우
     # 최대 점수 갱신
+    # depth == N인 경우는 모든 사격이 끝난 것.
     if depth == N:
         max_score = max(max_score, get_score(path))
         return
     
-    # 
+    # path통해 순열을 하나씩 기록해 간다.
+    # 이후 path를 get_score에 전달하여 전체 풍선합을 구함.
     for i in range(N):
         if not visited[i]:
             visited[i] = True
@@ -33,9 +35,6 @@ def get_score(order):
     total = 0
 
     for idx in order:
-
-        # idx 번째 풍선을 터뜨린 경우 점수 구현
-        left = idx - 1
 
         # temp = -1인 경우는 터진 풍선을 의미함.
         # 좌측 풍선 중 터지지 않은 첫 번째 풍선 찾기
