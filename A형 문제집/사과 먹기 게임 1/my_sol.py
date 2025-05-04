@@ -8,26 +8,42 @@ dir = (0, 1, 2, 3) # 우, 하, 좌, 상
 dv = (0, 1, 0, -1)
 dh = (1, 0, -1, 0)
 
-
-
-def find_apple(v, h):
+def find_apple(a, v, h):
     
     # 회전 횟수 변수를 0으로 초기확
-    trun_cnt = 0
+    turn_cnt = 0
+    flag_1 = True
 
-    # 해당 위치에서 상, 우, 하, 좌로 사과있나 확인
+    while flag_1:
 
-    # 있다면 해당 방향으로 회전 or 전진
+        # 해당 위치에서 상, 우, 하, 좌로 사과있나 확인
+        for d in range(4):
 
-    # 없다면 보는 방향으로 한 칸 이동.
+            # 보고 있는 위치를 기준으로 네 방향을 탐색
+            na = a + d
 
-    # 위 행동 반복.
-    
-    # 시작 위치 start를 현재 위치로 초기화
+            # 보고 있는 위치의 일직선에 사과가 있는지 탐색
+            for w in range(1, N - 1):
+                nv = v + (dv[d] * w)
+                nh = h + (dh[d] * w)
 
-    # retrun은 몇 번 회전했는지.
+                # 범위 넘어가면 skip
+                if nv < 0 or nv >= N or nh < 0 or nh >= N:
+                    continue
 
-    
+                # 사과가 있는지 탐색
+                if graph[nv][nh]:
+                    
+                    # 몇 번째 돌았을 때 찾았는지를 trun_cnt에 기록
+                    turn_cnt += d
+
+                    # 이후 해당 좌표로 이동하고, 결과 반환
+                    return (na, nv, nh), turn_cnt
+                    flag_1 = False
+            
+            # 네 방향을 탐색했는데 없다면 한 칸을 이동.
+            v = v + dv[a]
+            h = h + dh[a]
 
 T = int(input())
 
@@ -60,10 +76,11 @@ for tc in range(1, 1 + T):
 
     while cnt < flag:
 
-        a, v, h = apple[cnt]
+        an, av, ah = apple[cnt]
+        a, v, h = start
 
         # 좌표를 받아 해당 사과 위치까지 이동하며 회전 횟수를 카운트하는 함수.
-        find_apple(v, h)
+        find_apple(a, v, h, av, ah)
 
         # cnt 1증가
         cnt += 1
