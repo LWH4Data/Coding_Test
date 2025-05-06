@@ -23,6 +23,11 @@ def dijkstra():
 
     # queue에 초기값 삽입
     # queue에 (dist[0][0], 0, 0)을 요소로 추가.
+    '''
+    < 첫 요소는 무조건 cost >
+    - heapq는 첫 번째 요소를 기준으로 정렬을 수행한다.
+    - 따라서 '비용'을 기준으로 정렬해야 dijkstra를 구현할 수 있기 때문에 항상 첫 번째 요소가 cost가 된다.
+    '''
     heapq.heappush(queue, (dist[0][0], 0, 0))
 
     # heappush()와 heappop()을 제외하면 일반적인 BFS 다르지 않다.
