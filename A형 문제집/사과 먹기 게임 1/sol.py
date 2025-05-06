@@ -87,9 +87,9 @@ for tc in range(1, T + 1):
     # 사과 위치를 반환 (사과 번호, v, h)
     apples = []
     for v in range(N):
-        for c in range(N):
-            if graph[v][c] != 0:
-                apples.append((graph[v][c], v, c))
+        for h in range(N):
+            if graph[v][h] != 0:
+                apples.append((graph[v][h], v, h))
     
     # 번호 순 정렬
     apples = sorted(apples)
