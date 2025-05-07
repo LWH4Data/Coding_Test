@@ -59,7 +59,7 @@ def dijkstra():
             dist[nv][nh] = cost + temp
             heapq.heappush(queue, ((dist[nv][nh], nv, nh)))
     
-    print(dist[N-1][N-1])
+    print(f"#{tc} {dist[N-1][N-1]}")
 
 T = int(input())
 
