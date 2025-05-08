@@ -4,6 +4,7 @@ start_time = time.time()
 
 #========================================================
 from collections import defaultdict, deque
+# 문제에서 작업의 병렬처리라는 시뮬은 heapq를 통해 구현된다.
 import heapq
 
 '''
@@ -61,6 +62,7 @@ def simulate(boosted_task = None): # 도움 받는 작업을 기록하기 위해
             heapq.heappush(ready, (0, i)) # (start_time, task)
 
     # 준비 중이거나 진행 중인 작업이 없다면 종료.
+    # ready와 ongoing 두 개를 번갈아 가면수 수행하는 이유는 '병렬 수행'을 시뮬하기 위해서이다.
     while ready or ongoing:
         # 1. 준비 중인 작업
         while ready:
@@ -78,7 +80,8 @@ def simulate(boosted_task = None): # 도움 받는 작업을 기록하기 위해
             # ready 상태에서 작업이 시작 되었기에 ongoing으로 넘어간다.
             # 추가로 time(0)에 dur(현재 task의 시간)
             heapq.heappush(ongoing, (start + dur, task))
-        
+
+        # 2. 진행 중인 작업  
         while ongoing:
             # (해당 작업의 끝 시간, 해당 작업)을 초기화 한다.
             end, finished = heapq.heappop(ongoing)
@@ -118,6 +121,7 @@ for tc in range(1, T + 1):
         # 만약 선수작업이 있다면 추가.
         for parent in data[2 : ]:
             # 중복되지 않는 경우에만 graph에 추가.
+            # defaultdict가 set이기에 중복 추가 되어도 되지만 시간 복잡도를 최적화하기 위함.
             if node not in graph[parent]:
                 graph[parent].add(node)
                 # 진입차수 구현
