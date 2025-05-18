@@ -11,20 +11,19 @@ def simulate(start):
         cnt = 1
 
         while True:
-
             left = pos - cnt
             right = pos + cnt
-            
+
             left_check = False
             if 0 <= left < N:
                 if graph_c[left] == 1:
                     left_check = True
-
+            
             right_check = False
             if 0 <= right < N:
-                if graph_c[right]:
+                if graph_c[right] == 1:
                     right_check = True
-
+            
             if left_check and right_check:
                 return False
             
@@ -54,7 +53,7 @@ for tc in range(1, T + 1):
     if simulate(M):
         print(f'#{tc} 0')
         continue
-
+    
     found = False
     for d in range(1, N):
         for next in (M - d, M + d):
@@ -65,7 +64,7 @@ for tc in range(1, T + 1):
         
         if found:
             break
-    else: 
+    else:
         print(f'#{tc} -1')
 #=========================================================
 
