@@ -76,7 +76,7 @@ def BFS(cur_v, cur_h, cur_d, target_v, target_h):
             queue.append((v, h, nd, turn + 1))
 
     # 아무 것도 없는 경우 0을 반환하여 total_turn에 더해지는 값이 없게 함.
-    return 0
+    return 0, 0, 0, 0
 
 T = int(input())
 
