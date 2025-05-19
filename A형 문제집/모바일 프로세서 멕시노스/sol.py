@@ -100,7 +100,7 @@ for tc in range(1, T + 1):
     DFS(0, 0, 0)
 
     # 탐색 결과 반환
-    print(f'#{tc} {max_connected} {min_total_len}')
+    print(f'#{tc} {min_total_len}')
 #===========================================================
 
 end_time = time.time()

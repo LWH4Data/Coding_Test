@@ -84,7 +84,7 @@ for tc in range(1, 1 + T):
     DFS(0, visited, [])
 
     # 결과 출력
-    print(max_score)
+    print(f'#{tc} {max_score}')
 #================================================
 
 end_time = time.time()
