@@ -4,7 +4,7 @@ start_time = time.time()
 
 #================================================
 # 순열 탐색 DFS
-def DFS(depth, visited, path):
+def DFS(depth, path):
     global max_score
     
     # 모든 풍선을 전부 사격한 경우
@@ -19,13 +19,13 @@ def DFS(depth, visited, path):
     for i in range(N):
         if not visited[i]:
             visited[i] = True
-            DFS(depth + 1, visited, path + [i])
+            DFS(depth + 1, path + [i])
 
             # DFS를 탐색하고 난 후에는 복구 시켜줘야 함.
             visited[i] = False
 
-
 # 점수 계산 함수
+# order는 풍선을 쏘는 순서를 나타내는 경로
 def get_score(order):
 
     # 풍선 리스트를 복사해서 가져온다.
@@ -45,21 +45,21 @@ def get_score(order):
         while left >= 0 and temp[left] == -1:
             left -= 1
 
-        # 오른쪽 탐색은 왼쪽과 동이
+        # 오른쪽 탐색은 왼쪽과 동일
         right = idx + 1
         while right < N and temp[right] == -1:
             right += 1
 
         # left와 right 모두 풍선이 있는 경우
-        if 0 <= left < N and 0 <= right < N and temp[left] != -1 and temp[right] != -1:
+        if 0 <= left < N and 0 <= right < N:
             total += temp[left] * temp[right]
 
         # 왽쪽만 있는 경우
-        elif 0 <= left < N and temp[left] != -1:
+        elif 0 <= left < N:
             total += temp[left]
 
         # 오른쪽만 있는 경우
-        elif 0 <= right < N and temp[right] != -1:
+        elif 0 <= right < N:
             total += temp[right]
 
         # 양쪽 모두 없는 경우
@@ -81,7 +81,7 @@ for tc in range(1, 1 + T):
     visited = [False] * N
     
     # 탐색 (순열 기반 완전 탐색)
-    DFS(0, visited, [])
+    DFS(0, [])
 
     # 결과 출력
     print(f'#{tc} {max_score}')
