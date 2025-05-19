@@ -9,11 +9,11 @@ dv = (0, 1, 0, -1)
 dh = (1, 0, -1, 0)
 
 def BFS(cur_v, cur_h, cur_d, target_v, target_h):
-    visited = [[[False] * 4 for _ in range(N)] for _ in range(N)]
 
+    visited = [[[False] * 4 for _ in range(N)] for _ in range(N)]
     queue = deque()
 
-    queue.append((cur_v, cur_h, cur_d, 0)) 
+    queue.append((cur_v, cur_h, cur_d, 0))
 
     visited[cur_v][cur_h][cur_d] = True
 
@@ -23,24 +23,9 @@ def BFS(cur_v, cur_h, cur_d, target_v, target_h):
         if (v, h) == (target_v, target_h):
             return (turn, v, h, d)
 
-        nv = v + dv[d]
-        nh = h + dh[d]
-
-        if 0 <= nv < N and 0 <= nh < N and not visited[nv][nh][d]:
-            visited[nv][nh][d] = True
-            queue.appendleft((nv, nh, d, turn))
-
-        nd = (d + 1) % 4
-
-        if not visited[v][h][nd]:
-            visited[v][h][nd] = True
-            queue.append((v, h, nd, turn + 1))
-        
-    return 0
-
 T = int(input())
 
-for tc in range(1, 1 + T):
+for tc in range(1, T + 1):
     N = int(input())
     graph = [list(map(int, input().split())) for _ in range(N)]
 
@@ -56,10 +41,8 @@ for tc in range(1, 1 + T):
     cur_v, cur_h, cur_d = 0, 0, 0
 
     for _, target_v, target_h in apples:
-        turns, cur_v, cur_h, cur_d = BFS(cur_v, cur_h, cur_d, target_v, target_h)
-        total_turns += turns
+        turns, cur_v, cur_h, cur_d = BFS(cur_v, cur_h, cur_d, target_v, target_h):
 
-    print(f"#{tc} {total_turns}")
 
 #=============================================================
 
