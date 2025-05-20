@@ -9,7 +9,7 @@ def simulate(start):
 
     while True:
         cnt = 1
-
+        
         while True:
             left = pos - cnt
             right = pos + cnt
@@ -21,9 +21,9 @@ def simulate(start):
             
             right_check = False
             if 0 <= right < N:
-                if graph_c[right] == 1:
+                if graph[right] == 1:
                     right_check = True
-
+            
             if left_check and right_check:
                 return False
             
@@ -35,13 +35,11 @@ def simulate(start):
             if right_check:
                 graph_c[right] = 0
                 pos = right
-                break
 
             if left < 0 and right >= N:
                 return True
             
             cnt += 1
-
 
 T = int(input())
 
@@ -56,18 +54,19 @@ for tc in range(1, T + 1):
         continue
 
     found = False
-    for d in range(1, N):
+    for d in range(1, N + 1):
         for next in (M - d, M + d):
             if 0 <= next < N and simulate(next):
                 print(f'#{tc} {d}')
                 found = True
                 break
-
+        
         if found:
             break
 
     else:
-        print(f'{tc} -1')
+        print(f'#{tc} -1')
+
 #=========================================================
 
 end_time = time.time()
