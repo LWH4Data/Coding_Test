@@ -1,0 +1,91 @@
+import sys, time
+sys.stdin = open('sample_in.txt')
+start_time = time.time()
+
+#================================================
+# 순열 탐색 DFS
+def DFS(depth, path):
+    global max_score
+    
+    # 모든 풍선을 전부 사격한 경우
+    # 최대 점수 갱신
+    # depth == N인 경우는 모든 사격이 끝난 것.
+    if depth == N:
+        max_score = max(max_score, get_score(path))
+        return
+    
+    # path통해 순열을 하나씩 기록해 간다.
+    # 이후 path를 get_score에 전달하여 전체 풍선합을 구함.
+    for i in range(N):
+        if not visited[i]:
+            visited[i] = True
+            DFS(depth + 1, path + [i])
+
+            # DFS를 탐색하고 난 후에는 복구 시켜줘야 함.
+            visited[i] = False
+
+# 점수 계산 함수
+# order는 풍선을 쏘는 순서를 나타내는 경로
+def get_score(order):
+
+    # 풍선 리스트를 복사해서 가져온다.
+    temp = balloons[ : ]
+    
+    # 계산 결과를 변수 초기화
+    total = 0
+
+    for idx in order:
+
+        # temp = -1인 경우는 터진 풍선을 의미함.
+        # 좌측 풍선 중 터지지 않은 첫 번째 풍선 찾기
+        # 우선 바로 왼쪽 확인
+        left = idx - 1
+
+        # 왼쪽이 터진 풍선인데 탐색할 풍선이 남은 경우 계속 진행
+        while left >= 0 and temp[left] == -1:
+            left -= 1
+
+        # 오른쪽 탐색은 왼쪽과 동일
+        right = idx + 1
+        while right < N and temp[right] == -1:
+            right += 1
+
+        # left와 right 모두 풍선이 있는 경우
+        if 0 <= left < N and 0 <= right < N:
+            total += temp[left] * temp[right]
+
+        # 왽쪽만 있는 경우
+        elif 0 <= left < N:
+            total += temp[left]
+
+        # 오른쪽만 있는 경우
+        elif 0 <= right < N:
+            total += temp[right]
+
+        # 양쪽 모두 없는 경우
+        else:
+            total += temp[idx]
+
+        # 터진 풍선 체크
+        temp[idx] = -1
+    
+    # 전체 합 반환
+    return total
+        
+T = int(input())
+
+for tc in range(1, 1 + T):
+    N = int(input())
+    balloons = list(map(int, input().split()))
+    max_score = 0
+    visited = [False] * N
+    
+    # 탐색 (순열 기반 완전 탐색)
+    DFS(0, [])
+
+    # 결과 출력
+    print(f'#{tc} {max_score}')
+#================================================
+
+end_time = time.time()
+print('time :', end_time - start_time)
