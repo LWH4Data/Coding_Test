@@ -1,0 +1,7 @@
+-- 코드를 입력하세요
+SELECT FACTORY_ID, FACTORY_NAME, ADDRESS
+FROM FOOD_FACTORY
+# 강원도에 위치한 데이터만 필터링
+WHERE ADDRESS LIKE "%강원도%"
+# 공장 ID를 기준으로 오름차순 정렬.
+ORDER BY FACTORY_ID ASC
