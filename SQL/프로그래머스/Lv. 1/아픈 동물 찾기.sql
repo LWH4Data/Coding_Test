@@ -1,8 +1,8 @@
 -- 코드를 입력하세요
-# ANIMAL_ID와 NAME을 조회
+-- ANIMAL_ID와 NAME을 조회
 SELECT ANIMAL_ID, NAME
 FROM ANIMAL_INS
-# "Sick"인 동물만 필터링
+-- "Sick"인 동물만 필터링
 WHERE INTAKE_CONDITION = "Sick"
-# ANIMAL_ID 순으로 정렬
+-- ANIMAL_ID 순으로 정렬
 ORDER BY ANIMAL_ID ASC

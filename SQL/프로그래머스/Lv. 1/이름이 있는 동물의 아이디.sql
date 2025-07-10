@@ -1,7 +1,7 @@
 -- 코드를 입력하세요
 SELECT ANIMAL_ID
 FROM ANIMAL_INS
-# 이름이 NULL이 아닌 데이터만 필터링
+-- 이름이 NULL이 아닌 데이터만 필터링
 WHERE NAME IS NOT NULL
-# ID 기준 오름차순 정렬
+-- ID 기준 오름차순 정렬
 ORDER BY ANIMAL_ID ASC

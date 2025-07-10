@@ -1,8 +1,8 @@
 -- 코드를 입력하세요
-# ANIMAL_ID, NAME을 조회.
+-- ANIMAL_ID, NAME을 조회.
 SELECT ANIMAL_ID, NAME
 FROM ANIMAL_INS
-# INTAKE_CONDITION != "Aged"만 필터링.
+-- INTAKE_CONDITION != "Aged"만 필터링.
 WHERE INTAKE_CONDITION != "Aged"
-# ANIMAL_ID 순으로 정렬
+-- ANIMAL_ID 순으로 정렬
 ORDER BY ANIMAL_ID
