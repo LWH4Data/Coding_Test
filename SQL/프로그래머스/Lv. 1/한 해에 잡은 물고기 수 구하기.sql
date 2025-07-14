@@ -1,0 +1,5 @@
+-- 코드를 작성해주세요
+SELECT COUNT(*) AS FISH_COUNT
+FROM FISH_INFO
+-- 2021년만 필터링
+WHERE YEAR(TIME) = 2021 
