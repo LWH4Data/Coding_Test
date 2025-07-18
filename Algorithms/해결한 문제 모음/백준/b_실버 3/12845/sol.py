@@ -3,9 +3,42 @@ sys.stdin = open('input.txt')
 start_time = time.time()
 
 #=================================================
+N = int(input())
+num = list(map(int, input().split()))
 
+# 변수 선언
+temp_min = 0
+Ans = 0
 
+# while문을 통해 len(num) == 1일 때까지 반복
+while len(num) != 1:
 
+    # 최대값 연산을 위한 인덱스 저장.
+    max_idx = num.index(max(num))
+
+    # 최소값의 양 옆 값을 비교
+    # 예외 처리
+    # min_idx가 0인 경우
+    if max_idx == 0:
+        Ans += num[max_idx + 1] + num[max_idx]
+        num.pop(max_idx + 1)
+        continue
+
+    # min_idx가 끝 idx인 경우
+    if max_idx == len(num) - 1:
+        Ans += num[max_idx - 1] + num[max_idx]
+        num.pop(max_idx - 1)
+        continue
+
+    # 나머지는 양쪽 비교 후 합
+    if num[max_idx - 1] > num[max_idx + 1]:
+        Ans += num[max_idx + 1] + num[max_idx]
+        num.pop(max_idx + 1)
+    else:
+        Ans += num[max_idx - 1] + num[max_idx]
+        num.pop(max_idx - 1)
+
+print(Ans)
 #=================================================
 
 end_time = time.time()
@@ -19,15 +52,15 @@ print('time: ', end_time - start_time)
 2. 자기 자신을 기준으로 양쪽 값 중 더 큰 값에 병합.
 
 3. 풀이
-    - min()을 통해 가장 작은 값을 찾는다.
-    -> 가장 작은 값과 그 양쪽 값 중 큰 값과 누적합을 통해 답을 구한다.
-    -> min()을 통해 찾은 값은 remove를 통해 제거한다.
+    - max()을 통해 가장 큰 값을 찾는다.
+    -> 가장 큰 값과 그 양쪽 값 중 작은 값과 누적합을 통해 답을 구한다.
+    -> max()을 통해 찾은 값은 pop을 통해 index를 기반으로 제거한다.
     -> 리스트의 크기가 1이 되면 끝.
 '''
 
 '''
 < 시간 복잡도 >
-
+- 찾고 제거하고를 반복하기에 O(N)이 된다.
 '''
 
 '''
