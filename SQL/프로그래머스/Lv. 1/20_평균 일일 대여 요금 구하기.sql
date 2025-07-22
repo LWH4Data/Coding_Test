@@ -1,0 +1,5 @@
+-- 코드를 입력하세요
+SELECT ROUND(AVG(DAILY_FEE), 0) AS AVERAGE_FEE
+FROM CAR_RENTAL_COMPANY_CAR
+-- 자동차 종류가 'SUV'인 자동차들만 필터링
+WHERE CAR_TYPE = 'SUV'
