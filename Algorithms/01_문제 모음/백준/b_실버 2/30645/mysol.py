@@ -27,20 +27,25 @@ for tc in range(1, T + 1):
             
             # 노드에 적합한 인형 추가.
             while flag:
+
+                # p가 인형의 수보다 커지면 정지.
                 if p >= N:
                     break
                 
-                # p < C인 경우 그냥 추가.
+                # 첫 번째 행은 비교 대상이 없기에 그냥 추가.
                 if r == 0:
                     graph[r][c] = height[p]
                     flag = False
                     p += 1
                 
+                # 두 번째 행부터는 이전 행과 비교하여 높이가 같지 않다면 인형을 추가.
                 elif r >= 1 and graph[r-1][c] != height[p]:
                     graph[r][c] = height[p]
                     flag = False
                     p += 1
                 
+                # 위 두 경우가 아니라면 인형을 추가하지 않고 skip
+                # 해당 위치에 인형은 적재해야 하기에 while문은 지속
                 else:
                     p += 1
 

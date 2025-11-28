@@ -1,0 +1,9 @@
+-- 코드를 입력하세요
+SELECT
+  ANIMAL_TYPE,
+  COUNT(*) AS count
+FROM ANIMAL_INS
+-- ANIMAL_TYPE을 기준으로 그룹화
+GROUP BY ANIMAL_TYPE
+-- ORDER BY를 통해 고양이를 개보다 먼저 조회
+ORDER BY ANIMAL_TYPE;
