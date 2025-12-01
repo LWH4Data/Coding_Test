@@ -1,0 +1,5 @@
+-- 코드를 입력하세요
+SELECT *
+FROM FOOD_PRODUCT
+-- 가격이 가장 비싼 상품 필터링
+WHERE PRICE = (SELECT MAX(PRICE) FROM FOOD_PRODUCT)

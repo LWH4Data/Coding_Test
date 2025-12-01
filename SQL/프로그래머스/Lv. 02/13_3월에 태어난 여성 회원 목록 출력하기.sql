@@ -1,0 +1,11 @@
+-- 코드를 입력하세요
+SELECT 
+    MEMBER_ID,
+    MEMBER_NAME,
+    GENDER,
+    DATE_FORMAT(DATE_OF_BIRTH, "%Y-%m-%d") AS DATE_OF_BIRTH
+FROM MEMBER_PROFILE
+-- 여성이면서 3월인 경우만 필터링
+WHERE TLNO IS NOT NULL AND
+    GENDER = 'W' AND
+    DATE_FORMAT(DATE_OF_BIRTH, '%m') = 03 
