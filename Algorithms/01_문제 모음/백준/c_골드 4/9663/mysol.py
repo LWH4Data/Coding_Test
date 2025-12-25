@@ -101,7 +101,6 @@ def DFS(N, depth):
 
     if depth == N:
         ans += 1
-        return
 
     # 전체 탐색
     for i in range(N):
