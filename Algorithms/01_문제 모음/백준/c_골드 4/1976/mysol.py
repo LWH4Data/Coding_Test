@@ -31,11 +31,26 @@ graph = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
 
 # union-find를 위한 일차원 리스트
 parents = [0] * (N + 1)
+for i in range(N + 1):
+    parents[i] = i
 
-for i in range(1, N):
-    for j in range(1, N):
-        if graph[i]
+for i in range(N):
+    for j in range(i, N):
+        if graph[i][j] == 1:
+            # print('i: ', i, 'j: ', j)
+            union(i + 1, j + 1)
 
+flag = True
+numbers = list(map(int, sys.stdin.readline().split()))
+sample = parents[numbers[0]]
+for i in range(1, len(numbers)):
+    if parents[i] != sample:
+        flag = False
+
+if flag:
+    print("YES")
+else:
+    print("NO")
 #============================================================
 
 end = time.time()
