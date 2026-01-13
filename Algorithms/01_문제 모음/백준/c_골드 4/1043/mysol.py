@@ -4,7 +4,7 @@ start = time.time()
 
 #===========================================================
 N, M = map(int, sys.stdin.readline().split())
-jinsil = list(map(int, sys.stdin.readline().split()))
+jinsil = set(map(int, sys.stdin.readline().split()))
 print(jinsil)
 
 # 진실을 아는 사람이 없다면 예외 처리.
@@ -30,10 +30,9 @@ for party in parties:
         if person in jinsil:
             for i in party:
                 check[i] = True
-                jinsil.append(i)
+                jinsil.add(i)
 
 print(jinsil)
-print(check)
 
 #===========================================================
 
