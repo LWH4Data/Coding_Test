@@ -33,7 +33,7 @@ for party in parties:
                 jinsil.append(i)
 
 print(jinsil)
-check()
+print(check)
 
 #===========================================================
 
