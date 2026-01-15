@@ -33,13 +33,14 @@ start, end = map(int, sys.stdin.readline().split())
 q = []
 for i in graph[1]:
     heapq.heappush(q, (i[0], -i[1]))
-print(q)
+# print(q)
 
 # 위상정렬을 하면서 
 ans = []
 visited = [0] * (n + 1)
 while q:
     next, dist = q.pop()
+    # print(next, dist)
     print(next, dist)
     if next == end:
         ans.append((next, dist))
@@ -55,8 +56,8 @@ while q:
         if indegree[child[0]] == 0:
             q.append((child, temp))
 
-print(ans)
-print(visited)
+# print(ans)
+# print(visited)
 #=====================================================
 
 end = time.time()
