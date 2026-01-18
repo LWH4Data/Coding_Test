@@ -4,6 +4,8 @@ start_t = time.time()
 
 # 완전 탐색에 걸리는 시간 O(V + E) 251,000?
 #=============================================================
+# ● count 기반 풀이도 가능하다.
+# ● 구하는 거리의 순서가 작은 순으로 나오기 때문에 k번째에 기록하는 로직.
 from collections import defaultdict
 import heapq
 
@@ -27,7 +29,7 @@ while q:
     # 현재 특정 노드를 몇 번째 탐색하는 것인지 저장.
     count[now_node] += 1
     if count [now_node] == k:
-        ans[now_node] = dist
+        ans[now_node] = now_dist
     
     for child in graph[now_node]:
         temp = now_dist + child[1]
