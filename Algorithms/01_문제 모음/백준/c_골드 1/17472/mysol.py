@@ -51,6 +51,7 @@ def BFS(i, j):
             nc = c + dc[d]
             if 0 <= nr < N and 0 <= nc < M:
                 if not visited[nr][nc] and myMap[nr][nc] != 0:
+                    # 여기서 mlist 업데이트
                     addNode(nr, nc, queue)
     
     return mlist
