@@ -8,25 +8,22 @@ s_t = time.time()
 from collections import defaultdict
 import heapq
 
-# 로직에서 사용할 a-z, A-Z 문자와 수치 매핑 list
-char_list = [0, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 
-            'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-            'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-
 # 입력 받기
 N = int(sys.stdin.readline())
 grid_graph = [list(sys.stdin.readline().strip()) for _ in range(N)]
 
-# grid_graph의 문자를 숫자로 변환.
+# grid_graph의 문자를 숫자로 변환 (ord 사용)
 for i in range(N):
     for j in range(N):
-        if grid_graph[i][j] == '0':
+        cell = grid_graph[i][j]
+        if cell == '0':
             grid_graph[i][j] = 0
-        
-        grid_graph[i][j] = char_list.index(grid_graph[i][j])
+        elif 'a' <= cell <= 'z':
+            grid_graph[i][j] = ord(cell) - ord('a') + 1  # a=1, z=26
+        else:
+            grid_graph[i][j] = ord(cell) - ord('A') + 27 # A=27, Z=52
 
-# N == 1인 경우 엣지 케이스 처리.
+# N == 1인 경우 예외처리
 if N == 1:
     print(grid_graph[0][0])
 else:
