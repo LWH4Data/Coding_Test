@@ -33,6 +33,7 @@ else:
 
     # 삭제될 노드와 그 자식들을 find() 함수로 삭제
     del_node = int(sys.stdin.readline())
+    
     # 부모 노드를 관리할 parent 리스트 구현. (0부터 시작).
     parent = [0] * N
     for i in range(N):
