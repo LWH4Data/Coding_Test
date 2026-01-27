@@ -5,18 +5,23 @@ s_t = time.time()
 #==============================================================
 from collections import defaultdict, deque
 
-# find() 함수 생성.
+# find() 함수 생성.====================================
 def find(a):
-    if parent[a] == 2:
-        return 2
+    # find를 하는 도중 del_node를 만난다면 del_node의 자식이므로
+    # 제외.
+    if parent[a] == del_node:
+        return del_node
 
+    # 노드 a가 부모가 없다면 조상을 찾은 것.
     if parent[a] == a:
         return a
+    
+    # 아니라면 조상까지 찾아서 올라감.
     else:
         parent[a] = find(parent[a])
         return parent[a]
 
-
+# 풀이==========================================================
 # 입력값 받기.
 N = int(sys.stdin.readline())
 if N == 1:
@@ -34,6 +39,10 @@ else:
     # 삭제될 노드와 그 자식들을 find() 함수로 삭제
     del_node = int(sys.stdin.readline())
     
+    if del_node == root:
+        print(0)
+        sys.exit()
+
     # 부모 노드를 관리할 parent 리스트 구현. (0부터 시작).
     parent = [0] * N
     for i in range(N):
@@ -52,30 +61,30 @@ else:
     while q:
         now = q.popleft()
 
+        valid_child = 0
+        
+        # now에 자식이 있는 경우
         for next in graph[now]:
-            if next == del_node and len(graph[next]) == 1:
-                ans += 1
 
+            # 자식 노드가 del_node인지 혹은 그 자손인지 확인한다.
             if next == del_node or find(next) == del_node:
                 continue
-            
+
+            # 방문 여부를 체크한다.
             if visited[next]:
                 continue
             visited[next] = True
-            
-            if not graph[next]:
-                ans += 1
-            
-            
+
+            # next가 del_node도 아니고, 방문한 적이 없다면 탐색 가능한 자식이기에
+            # q에 추가하고, 하단에서 leaf node로 추가되지 않도록 +1을 한다.
+            valid_child += 1
             q.append(next)
-    print(ans)
-    # find를 통해 지워야 하는 노드의 모든 자식들을 업데이트 한다.
 
-    # root부터 BFS를 돌린다.
+        # now에 자식이 없는 경우는 leaf node이기에 +1을 하여 ans에 포함되지 않도록 한다.
+        if valid_child == 0:
+            ans += 1
         
-        # parents가 지우는 노드인 경우에는 탐색을 하지 않는다.
-
-        # 탐색을 하지 않는 노드이거나 자식이 없는 노드인 경우를 카운트한다. 
+    print(ans)
 #==============================================================
 
 e_t = time.time()
