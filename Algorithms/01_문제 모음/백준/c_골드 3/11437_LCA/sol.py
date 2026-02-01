@@ -64,6 +64,7 @@ visited = [False] * (N + 1) # 방문 여부
 BFS(1)
 
 # 알고리즘 수행 및 출력
+#   ● 중복되는 탐색의 경우 미리 입력값을 set()으로 저장하여 불필요한 탐색을 제거할 수 있다.
 M = int(sys.stdin.readline())
 for _ in range(M):
     a, b = map(int, sys.stdin.readline().split())
