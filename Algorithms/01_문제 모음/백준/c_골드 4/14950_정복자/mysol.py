@@ -27,17 +27,20 @@ cnt = 0
 while q:
     now_weight, now_node = heapq.heappop(q)
 
-
     if visited[now_node]:
         continue
     visited[now_node] = True
 
     result += now_weight
-
+    cnt += 1
+    
     for next_node, next_weight in graph[now_node]:
-        heapq.heappush(q, (next_weight + T, next_node))
 
-print(result)
+        heapq.heappush(q, (next_weight, next_node))
+
+# T의 누적합을 구현해야 하기에 하단의 방식으로 삼각합을 활용해야 한다.
+# print(result + T * (cnt - 1))
+print(result + T * (cnt - 2) * (cnt - 1) // 2)
 #==============================================================
 
 e_t = time.time()
