@@ -1,4 +1,4 @@
-import sys, time
+gitimport sys, time
 sys.stdin = open("input.txt")
 s_t = time.time()
 
