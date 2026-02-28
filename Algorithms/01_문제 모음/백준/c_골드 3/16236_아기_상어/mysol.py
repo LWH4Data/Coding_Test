@@ -6,86 +6,101 @@ s_t = time.time()
 from collections import deque
 
 # 델타 로직
-dv = (-1, 1, 0 ,0)
+dv = (-1, 1, 0, 0)
 dh = (0, 0, -1, 1)
 
-# < 함수 >: BFS 탐색==========================================================
-def BFS(v: int, h: int, size: int, cnt: int, dist: int) -> tuple[int, int, int, int, int]:
-    # 가장 가까우면서 첫 번째로 탐색할 물고기가 아님을 확인.
-    is_first = False
+# < 함수 >===============================================================
+"""
+BFS로 탐색하며 거리가 최소인 후보 물고기들을 탐색한다.
+"""
+def bfs_find_candidates(sv: int, sh: int, size: int):
+    dist_map = [[-1] * N for _ in range(N)]
     q = deque()
-    visited = [[False] * N for _ in range(N + 1)]
-    q.append((v, h, size, cnt, dist))
+    q.append((sv, sh))
+    dist_map[sv][sh] = 0
+
+    candidates = []
+    min_dist = None
 
     while q:
-        v, h, size, cnt, dist = q.popleft()
+        v, h = q.popleft()
+        cur_d = dist_map[v][h]
 
+        # 이미 먹이를 찾은 경우 더 먼 거리의 먹이를 찾을 필요 없음.
+        if min_dist is not None and cur_d > min_dist:
+            # BFS는 거리 순서대로 찾기 때문에 넘어가는 순간 이전 거리의 탐색은 모두 끝난 것.
+            break
+
+        # 현재 칸이 먹을 수 있는 물고리라면 후보 추가.
+        if 0 < graph[v][h] < size:
+            if min_dist is None:
+                min_dist = cur_d
+            candidates.append((cur_d, v, h))
+        
         for i in range(4):
             nv = v + dv[i]
             nh = h + dh[i]
 
-            # 범위를 벗어나는 경우 skip
             if nv < 0 or nv >= N or nh < 0 or nh >= N:
                 continue
                 
-            # 물고기를 만났는데 나보다 크다면 skip
+            # 큰 물고기는 지나갈 수 없음.
             if graph[nv][nh] > size:
                 continue
 
-            # 크기가 작은 경우 먼저 먹어되는지 확인하기.
-            if graph[nv][nh] < size:
-                is_first = check_same(nv, nh)
-
-                if is_first:
-                    # 먹은 횟수 증가.
-                    cnt += 1
-                    # 만약 먹은 횟수가 상어의 크기 이상이라면 크기 증가 시키고 초기화.
-                    if cnt >= size:
-                        size += 1
-                        cnt = 0
-                    
-                    # 먹었기에 0처리.
-                    graph[nv][nh] = 0
-                    
-                    # 먹은 경우 해당 위치가 끝지점이기에 반환.
-                    return nv, nh, size, cnt, dist + 1
-
-            # 아닌 경우 q에 넣고 탐색을 지속.
-            if visited[nv][nh]:
+            # 거리를 visited로 사용한다.
+            if dist_map[nv][nh] != -1:
                 continue
-            visited[nv][nh] = True
-            q.append((nv, nh, size, cnt, dist + 1))
+            dist_map[nv][nh] = cur_d + 1
 
-# < 함수 >: 같은 크기의 수가 있는지 검증.========================================
-def check_same(v: int , h: int) -> bool:
-    
-    # 해당 물고기가 가장 먼저 방문할 물고가기 아니라면 False를 반환.
-    for i in range(0, v + 1):
-        for j in range(0, h + 1):
-            # 지금과 동일한 칸은 확인하지 않는다.
-            if i == v and j == h:
-                continue
-            # 만약 같은 크기의 물고기가 있다면 False를 반환한다.
-            if graph[i][j] == graph[v][h]:
-                return False
-    
-    # 아니라면 True를 반환한다.
-    return False
+            # 탐색 추가.
+            q.append((nv, nh))
 
-# 풀이=======================================================================
-# 입력값 받기.
+    return candidates
+
+# 풀이====================================================================
+# 입력
 N = int(sys.stdin.readline())
 graph = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
 
-# 상어의 위치 찾기.
+# 상어 위치 찾기.
 for i in range(N):
     for j in range(N):
         if graph[i][j] == 9:
-            v, h = i, j
+            sv, sh  = i, j
+            graph[i][j] = 0
 
-# 
-print(BFS(v, h, 2, 0 ,0))
-        
+# 상어의 상태 정보
+size = 2
+eat = 0
+total_dist = 0
+
+# 탐색 시작.
+while True:
+    candidates = bfs_find_candidates(sv, sh, size)
+
+    # 먹을 수 있는 물고기가 없다면 종료.
+    if not candidates:
+        break
+
+    # (거리, 행, 열) 기준 정렬 -> 첫 번째가 규칙에 맞는 먹이.
+    candidates.sort()
+    dist, fv, fh = candidates[0]
+
+    # 상어 이동 + 누적거리 업데이트
+    sv, sh = fv, fh
+    total_dist += dist
+
+    # 물고기 먹기.
+    graph[sv][sh] = 0
+    eat += 1
+
+    # 크기 증가 확인.
+    if eat == size:
+        size += 1
+        eat = 0
+
+print(total_dist)
 #========================================================================
 
 e_t = time.time()
