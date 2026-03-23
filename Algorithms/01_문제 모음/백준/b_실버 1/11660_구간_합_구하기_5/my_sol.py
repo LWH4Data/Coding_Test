@@ -2,24 +2,22 @@ import sys, time
 start = time.time()
 sys.stdin = open("input.txt")
 
-#============================================
-# < 함수 >: sv, sh, ev, eh를 받아서 해당 범위의 합을 구하는 함수.
-def total_sum(sv, sh, ev, eh):
-    ans = 0
-    for v in range(sv, ev + 1):
-        for h in range(sh, eh + 1):
-            ans += grid[v][h]
-
-    return ans
-
+#===========================================================
 N, M = map(int, sys.stdin.readline().split())
 grid = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
-# sv, sh, ev, sh (시작이 0부터 시작하도록 조정).
-nums = list()
+
+# 누적합 grid 생성.
+prefix = [[0] * (N + 1) for _ in range(N + 1)]
+for i in range(1, N + 1):
+    for j in range(1, N + 1):
+        prefix[i][j] = prefix[i - 1][j] + prefix[i][j - 1] + grid[i - 1][j - 1] - prefix[i - 1][j - 1]
+
+ans = 0
 for _ in range(M):
-    sv, sh, ev, eh = map(int, sys.stdin.readline().split())
-    print(total_sum(sv - 1, sh - 1, ev - 1, eh - 1))
-#============================================
+    x1, y1, x2, y2 = map(int, sys.stdin.readline().split())
+    ans = prefix[x2][y2] - prefix[x1 - 1][y2] - prefix[x2][y1 - 1] + prefix[x1 - 1][y1 - 1]
+    print(ans)
+#===========================================================
 
 end = time.time()
 print("time:", end-start)
